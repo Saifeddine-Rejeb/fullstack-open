@@ -1,3 +1,5 @@
+import Weather from "./Weather";
+
 const Country = ({ country }) => {
     return (
         <div>
@@ -11,12 +13,18 @@ const Country = ({ country }) => {
                         <li key={language}>{language}</li>
                     ))}
                 </ul>
-                <img src={country.flags.png} alt={country.name.common} width="100" />
+                <img src={country.flags.png} alt={country.name.common} width="150" />
             </div>
     );
 }
 
-const Display = ({countries}) => {
+const ShowButton = ({ country, handleShow }) => {
+    return (
+        <button onClick={() => handleShow(country)}>Show</button>
+    )
+}
+
+const Display = ({countries, handleShow}) => {
 
     if (countries.length > 10) {
         return <div>Too many matches, specify another filter</div>
@@ -24,7 +32,10 @@ const Display = ({countries}) => {
     
     if (countries.length === 1) {
         return (
-            <Country country={countries[0]} />
+            <div>
+                <Country country={countries[0]} />
+                <Weather capital={countries[0].capital} /> 
+            </div>
         )
     }
     else{
@@ -33,6 +44,7 @@ const Display = ({countries}) => {
                 {countries.map((country) => (
                     <div key={country.name.common}>
                         {country.name.common}
+                        <ShowButton country={country} handleShow={handleShow} />    
                     </div>
                 ))}
             </div>

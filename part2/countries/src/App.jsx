@@ -24,10 +24,14 @@ const App = () => {
         country.name.common.toLowerCase().includes(filter.toLowerCase())
     );
 
+    const handleShow = (country)  => {
+        setFilter(country.name.common);
+    }
+
     return (
         <div>
             <Filter country={filter} handleChange={handleFilterChange} />
-            <Diplay countries={countriesToShow} />
+            <Diplay countries={countriesToShow} handleShow={handleShow} />
         </div>
     )
 }
