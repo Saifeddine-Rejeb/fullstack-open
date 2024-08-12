@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan')
 
 app.use(express.json())
 
@@ -25,6 +26,10 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
+
+app.use(morgan('tiny', {
+    skip: (req, res) => { return req.method === 'POST' }
+}))
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
@@ -55,6 +60,10 @@ const generateId = () => {
   return String(Math.floor(Math.random() * 1000000))
 }
 
+morgan.token('body',  (req, res) => JSON.stringify(req.body) )
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
 app.post('/api/persons', (request, response) => {
     const body = request.body
     if(!body.name){
@@ -80,8 +89,6 @@ app.post('/api/persons', (request, response) => {
     persons = persons.concat(person)
     response.json(person)
 })
-
-
 
 const PORT = 3001;
 app.listen(PORT, () => {
