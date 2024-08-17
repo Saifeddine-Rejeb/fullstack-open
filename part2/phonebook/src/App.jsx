@@ -37,8 +37,14 @@ const App = () => {
               setMessage(null)
             } , 5000)
           })
-          .catch(() => {
-            setMessage({text: `Information of ${newName} has already been removed from server`, type: 'error'})
+          .catch(error => {
+            if (error.response.data.error) {
+              console.log(error.response.data.error)
+              setMessage({text: error.response.data.error, type: 'error'})
+            } else {
+              setMessage({text: `Information of ${newName} has already been removed from server`, type: 'error'})
+              setPersons(persons.filter(person => person.id !== changedPerson.id))
+            }
             setTimeout(() => {
               setMessage(null)
             } , 5000)
@@ -59,6 +65,13 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setMessage({text: `Added ${newName}`, type: 'success'})
+          setTimeout(() => {
+            setMessage(null)
+          } , 5000)
+        })
+        .catch(error => {
+          console.log(error.response.data.error)
+          setMessage({text: error.response.data.error, type: 'error'})
           setTimeout(() => {
             setMessage(null)
           } , 5000)
